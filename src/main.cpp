@@ -9,19 +9,21 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    MoveableRectangle rectangle(5,5,100,50, &window);
+    MoveableRectangle player(5,5,100,50, &window);
+    MoveableRectangle rectangle(500, 500, 500, 50, &window, sf::Color::Red);
 
     while (window.isOpen()) {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            if (event.type == sf::Event::KeyPressed) {
-                rectangle.ProcessEvent(event);
+            if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
+                player.ProcessEvent(event);
             }
         }
         window.clear();
-        rectangle.ProcessLogic();
+        player.ProcessLogic(rectangle);
+        window.draw(player);
         window.draw(rectangle);
         window.display();
     }
