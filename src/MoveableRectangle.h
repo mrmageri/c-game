@@ -1,6 +1,7 @@
 #ifndef MOVEABLERECTANGLE
 #define MOVEABLERECTANGLE
 #include <SFML/Graphics.hpp>
+#include <iostream>
 class MoveableRectangle : public sf::RectangleShape{
 public:
 	MoveableRectangle(sf::RenderWindow* window);

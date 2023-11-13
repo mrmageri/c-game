@@ -10,7 +10,7 @@ int main() {
     window.setFramerateLimit(MAX_FPS);
 
     MoveableRectangle player(5,5,100,50, &window);
-    MoveableRectangle rectangle(500, 500, 500, 50, &window, sf::Color::Red);
+    MoveableRectangle rectangle(500, 500, 20, 20, &window, sf::Color::Red);
 
     while (window.isOpen()) {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
