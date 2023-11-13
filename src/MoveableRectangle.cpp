@@ -53,13 +53,13 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
                                           const sf::Vector2<float> &lhs_speed) {
     static int counter = 0;
     if (lhs.getPosition().y + lhs.getSize().y >= rhs.getPosition().y &&
-        lhs.getPosition().y + lhs.getSize().y < rhs.getPosition().y + rhs.getSize().y &&
+        lhs.getPosition().y < rhs.getPosition().y &&
         lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
         lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x && lhs_speed.y > 0) {
         std::cout << "TOP collision (" << ++counter << ")\n";
         return UP;
     } else if (lhs.getPosition().y <= rhs.getPosition().y + rhs.getSize().y &&
-               lhs.getPosition().y > rhs.getPosition().y &&
+               lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y + rhs.getSize().y &&
                lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
                lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x && lhs_speed.y < 0) {
         std::cout << "BOTTOM collision (" << ++counter << ")\n";
