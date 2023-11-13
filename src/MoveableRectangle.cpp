@@ -14,7 +14,6 @@ MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::Ren
         : sf::RectangleShape({w, h}), window(window) {
     setPosition(x, y);
     setFillColor(color);
-    //setOutlineColor(sf::Color::Magenta); setOutlineThickness(10.0f);
 }
 
 void MoveableRectangle::ProcessEvent(sf::Event &event) {
@@ -66,16 +65,16 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
         std::cout << "BOTTOM collision (" << ++counter << ")\n";
         return DOWN;
     } else if (lhs.getPosition().x + lhs.getSize().x >= rhs.getPosition().x &&
-               lhs.getPosition().x < rhs.getPosition().x&&
+               lhs.getPosition().x < rhs.getPosition().x &&
                lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
                lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x > 0
             ) {
         std::cout << "LEFT collision (" << ++counter << ")\n";
         return LEFT;
-    }else if (lhs.getPosition().x <= rhs.getPosition().x + rhs.getSize().x &&
-              lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
-              lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
-              lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x < 0
+    } else if (lhs.getPosition().x <= rhs.getPosition().x + rhs.getSize().x &&
+               lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
+               lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
+               lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x < 0
             ) {
         std::cout << "RIGHT collision (" << ++counter << ")\n";
         return RIGHT;
@@ -92,46 +91,25 @@ void MoveableRectangle::ProcessMovement(sf::RectangleShape &rectangleshape) {
         speedy = 0;
     }
 
-    if (getGlobalBounds().intersects(rectangleshape.getGlobalBounds())) {
-        intersectOfRectangles(*this, rectangleshape, {speedx, speedy});
-        if (speedx < 0) {
-            setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
-            speedx = 0;
-        }
-        if (speedx > 0) {
-            setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
-            speedx = 0;
-        }
-        if (speedy < 0) {
-            setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
-            speedy = 0;
-        }
-        if (speedy > 0) {
+    switch (intersectOfRectangles(*this, rectangleshape, {speedx, speedy})) {
+        case UP:
             setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
             speedy = 0;
-        }
+            break;
+        case DOWN:
+            setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
+            speedy = 0;
+            break;
+        case LEFT:
+            setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
+            speedx = 0;
+            break;
+        case RIGHT:
+            setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
+            speedx = 0;
+            break;
+        case NONE:
+            break;
     }
-
-//	if (speedx < 0) {
-//		if (getGlobalBounds().intersects(rectangleshape.getGlobalBounds())) {
-//			setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
-//			speedx = 0;
-//		}
-//	}else if (speedx > 0) {
-//		if (getGlobalBounds().intersects(rectangleshape.getGlobalBounds())) {
-//			setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
-//			speedx = 0;
-//		}
-//	}else if (speedy < 0) {
-//		if (getGlobalBounds().intersects(rectangleshape.getGlobalBounds())) {
-//			setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
-//			speedy = 0;
-//		}
-//	} else if (speedy > 0 && speedx == 0) {
-//		if (getGlobalBounds().intersects(rectangleshape.getGlobalBounds())) {
-//			setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
-//			speedy = 0;
-//		}
-//	}
     move({speedx, speedy});
 }
