@@ -14,11 +14,16 @@ MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::Ren
         : sf::RectangleShape({w, h}), window(window) {
     setPosition(x, y);
     setFillColor(color);
-    sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile(path)) {
+    if (!texture.loadFromFile(path)) {
         throw std::runtime_error("No player sprite found!");
     }
-    setTexture(&playerTexture);
+    if (!textureRight.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerRight.png")) {
+        throw std::runtime_error("No player sprite found!");
+    }
+    if (!textureLeft.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerLeft.png")) {
+        throw std::runtime_error("No player sprite found!");
+    }
+    setTexture(&texture);
 }
 
 void MoveableRectangle::ProcessEvent(sf::Event &event) {
@@ -32,16 +37,17 @@ void MoveableRectangle::ProcessEvent(sf::Event &event) {
 
     }  */
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        if (speedx < 5.0f) speedx += 1.0f;
-
+        speedx = 5.0f;
+        setTexture(&textureRight);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        if (speedx > -5.0f) speedx -= 1.0f;
-
+         speedx = -5.0f;
+         setTexture(&textureLeft);
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
         !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         speedx = 0;
+        setTexture(&texture);
     }
     /*if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
         !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {

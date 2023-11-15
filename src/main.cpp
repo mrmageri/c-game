@@ -10,8 +10,7 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    MoveableRectangle player(500,0, 72, 100, &window, "E:/mrmageri-ñ++/c-game/resources/player/player1.png");
-
+    MoveableRectangle player(500,0, 72, 100, &window, "E:/mrmageri-ñ++/c-game/resources/player/playerFront.png");
 
     sf::RectangleShape rectangle({400,400});
     rectangle.setPosition(500, 500);
@@ -24,8 +23,11 @@ int main() {
             if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
                 player.ProcessEvent(event);
             }
+            if (sf::Event::MouseButtonPressed) {
+
+            }
         }
-        window.clear();
+        window.clear(sf::Color(67,100,199));
         player.ProcessLogic(rectangle);
         window.draw(player);
         window.draw(rectangle);

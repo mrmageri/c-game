@@ -18,5 +18,8 @@ private:
 	sf::RenderWindow* window;
 	float speedx = 0;
 	float speedy = 0;
+	sf::Texture texture;
+	sf::Texture textureRight;
+	sf::Texture textureLeft;
 };
 #endif // !BouncCircle 

@@ -17,7 +17,6 @@ void BouncCircle::Process() {
             move({ speedX, speedY += (acceleration * startTime.getElapsedTime().asSeconds()) / 10 }); 
         }
         else {
-            move({ speedX, 0 });
             if (getFillColor().r == 255) {
                 changeToOpposite = true;
             }
