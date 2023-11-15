@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include "MoveableRectangle.h"
 
 const int MAX_FPS = 60;
@@ -9,8 +10,16 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    MoveableRectangle player(5,5,100,50, &window);
-    MoveableRectangle rectangle(500, 500, 400, 400, &window, sf::Color::Red);
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/player1.png")) {
+        throw std::runtime_error("No player sprite found!");
+    }
+    MoveableRectangle player(500,0, 72, 100, &window);
+    player.setTexture(&playerTexture);
+
+
+    sf::RectangleShape rectangle({400,400});
+    rectangle.setPosition(500, 500);
 
     while (window.isOpen()) {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
