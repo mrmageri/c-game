@@ -10,10 +10,15 @@ enum COLLISION_DIRECTION {
 
 MoveableRectangle::MoveableRectangle(sf::RenderWindow *window) : window(window) {}
 
-MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, sf::Color color)
+MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, const std::string& path, sf::Color color)
         : sf::RectangleShape({w, h}), window(window) {
     setPosition(x, y);
     setFillColor(color);
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile(path)) {
+        throw std::runtime_error("No player sprite found!");
+    }
+    setTexture(&playerTexture);
 }
 
 void MoveableRectangle::ProcessEvent(sf::Event &event) {

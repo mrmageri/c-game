@@ -5,7 +5,7 @@
 class MoveableRectangle : public sf::RectangleShape{
 public:
 	MoveableRectangle(sf::RenderWindow* window);
-	MoveableRectangle(float x ,float y, float w, float h,sf::RenderWindow* window, sf::Color color = sf::Color::White);
+	MoveableRectangle(float x ,float y, float w, float h,sf::RenderWindow* window, const std::string& path, sf::Color color = sf::Color::White);
 
 	~MoveableRectangle() = default;
 

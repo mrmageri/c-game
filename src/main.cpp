@@ -10,12 +10,7 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/player1.png")) {
-        throw std::runtime_error("No player sprite found!");
-    }
-    MoveableRectangle player(500,0, 72, 100, &window);
-    player.setTexture(&playerTexture);
+    MoveableRectangle player(500,0, 72, 100, &window, "E:/mrmageri-ñ++/c-game/resources/player/player1.png");
 
 
     sf::RectangleShape rectangle({400,400});
