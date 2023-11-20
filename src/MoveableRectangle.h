@@ -12,6 +12,7 @@ enum COLLISION_DIRECTION {
 	NONE
 };
 
+
 class MoveableRectangle : public sf::RectangleShape{
 public:
 	MoveableRectangle(sf::RenderWindow* window);
