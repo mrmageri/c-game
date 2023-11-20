@@ -126,3 +126,7 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     }
     move({speedx, speedy});
 }
+
+Player::Player(sf::RenderWindow *window) : MoveableRectangle(window) {
+
+}

@@ -22,6 +22,6 @@ public:
 	virtual void ProcessLogic(sf::RectangleShape& rectangleshape) final;
 
 protected:
-	virtual void Player::ProcessMovement(sf::RectangleShape& rectangleshape) final;
+	virtual void ProcessMovement(sf::RectangleShape& rectangleshape) final;
 };
 #endif // !BouncCircle 

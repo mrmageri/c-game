@@ -5,32 +5,35 @@
 #include <iostream>
 
 enum COLLISION_DIRECTION {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	NONE
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    NONE
 };
 
 
-class MoveableRectangle : public sf::RectangleShape{
+class MoveableRectangle : public sf::RectangleShape {
 public:
-	MoveableRectangle(sf::RenderWindow* window);
-	MoveableRectangle(float x ,float y, float w, float h,sf::RenderWindow* window, sf::Color color = sf::Color::White);
+    MoveableRectangle(sf::RenderWindow *window);
 
-	virtual ~MoveableRectangle() = default;
+    MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, sf::Color color = sf::Color::White);
 
-	virtual void ProcessEvent(sf::Event& event) = 0;
+    virtual ~MoveableRectangle() = default;
 
-	virtual void ProcessLogic(sf::RectangleShape& rectangleshape) = 0;
+    virtual void ProcessEvent(sf::Event &event) = 0;
+
+    virtual void ProcessLogic(sf::RectangleShape &rectangleshape) = 0;
+
 protected:
-	virtual void ProcessMovement(sf::RectangleShape& rectangleshape) = 0;
+    virtual void ProcessMovement(sf::RectangleShape &rectangleshape) = 0;
 
-	sf::RenderWindow* window;
-	float speedx = 0;
-	float speedy = 0;
-	sf::Texture texture;
-	sf::Texture textureRight;
-	sf::Texture textureLeft;
+    sf::RenderWindow *window;
+    float speedx = 0;
+    float speedy = 0;
+    sf::Texture texture;
+    sf::Texture textureRight;
+    sf::Texture textureLeft;
 };
-#endif // !BouncCircle 
+
+#endif // !BouncCircle

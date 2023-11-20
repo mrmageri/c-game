@@ -24,9 +24,6 @@ int main() {
             if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
                 player.ProcessEvent(event);
             }
-            if (sf::Event::MouseButtonPressed) {
-
-            }
         }
         window.clear(sf::Color(67,100,199));
         player.ProcessLogic(rectangle);
