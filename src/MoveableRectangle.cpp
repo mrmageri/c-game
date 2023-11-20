@@ -10,17 +10,17 @@ enum COLLISION_DIRECTION {
 
 MoveableRectangle::MoveableRectangle(sf::RenderWindow *window) : window(window) {}
 
-MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, const std::string& path, sf::Color color)
+MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, sf::Color color)
         : sf::RectangleShape({w, h}), window(window) {
     setPosition(x, y);
     setFillColor(color);
-    if (!texture.loadFromFile(path)) {
+    if (!texture.loadFromFile(PLAYER_FRONT)) {
         throw std::runtime_error("No player sprite found!");
     }
-    if (!textureRight.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerRight.png")) {
+    if (!textureRight.loadFromFile(PLAYER_RIGHT)) {
         throw std::runtime_error("No player sprite found!");
     }
-    if (!textureLeft.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerLeft.png")) {
+    if (!textureLeft.loadFromFile(PLAYER_LEFT)) {
         throw std::runtime_error("No player sprite found!");
     }
     setTexture(&texture);

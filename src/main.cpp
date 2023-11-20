@@ -10,7 +10,7 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    MoveableRectangle player(500,0, 72, 100, &window, "E:/mrmageri-ñ++/c-game/resources/player/playerFront.png");
+    MoveableRectangle player(500,0, 72, 100, &window);
 
     sf::RectangleShape rectangle({400,400});
     rectangle.setPosition(500, 500);
