@@ -1,10 +1,8 @@
 #include "Player.h"
 
+Player::Player(sf::RenderWindow* window) : MoveableRectangle(window){}
 
-
-Player::Player(float x, float y, float w, float h, sf::RenderWindow* window, sf::Color color) : MoveableRectangle(window) {
-    setPosition(x, y);
-    setFillColor(color);
+Player::Player(float x, float y, float w, float h, sf::RenderWindow* window, sf::Color color) : MoveableRectangle( x,  y,  w,  h, window,color) {
     if (!texture.loadFromFile(PLAYER_FRONT)) {
         throw std::runtime_error("No player sprite found!");
     }
@@ -127,6 +125,3 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     move({speedx, speedy});
 }
 
-Player::Player(sf::RenderWindow *window) : MoveableRectangle(window) {
-
-}
