@@ -1,19 +1,29 @@
 #ifndef MOVEABLERECTANGLE
 #define MOVEABLERECTANGLE
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
+enum COLLISION_DIRECTION {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	NONE
+};
+
 class MoveableRectangle : public sf::RectangleShape{
 public:
 	MoveableRectangle(sf::RenderWindow* window);
-	MoveableRectangle(float x ,float y, float w, float h,sf::RenderWindow* window, const std::string& path, sf::Color color = sf::Color::White);
+	MoveableRectangle(float x ,float y, float w, float h,sf::RenderWindow* window, sf::Color color = sf::Color::White);
 
-	~MoveableRectangle() = default;
+	virtual ~MoveableRectangle() = default;
 
-	void ProcessEvent(sf::Event& event);
+	virtual void ProcessEvent(sf::Event& event) = 0;
 
-	void ProcessLogic(sf::RectangleShape& rectangleshape);
-private:
-	void ProcessMovement(sf::RectangleShape& rectangleshape);
+	virtual void ProcessLogic(sf::RectangleShape& rectangleshape) = 0;
+protected:
+	virtual void ProcessMovement(sf::RectangleShape& rectangleshape) = 0;
 
 	sf::RenderWindow* window;
 	float speedx = 0;

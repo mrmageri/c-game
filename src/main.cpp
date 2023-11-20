@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include "MoveableRectangle.h"
+#include "Player.h"
 
 const int MAX_FPS = 60;
 const uint32_t WIDTH = 1920u;
@@ -10,7 +11,7 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    MoveableRectangle player(500,0, 72, 100, &window, "E:/mrmageri-ñ++/c-game/resources/player/playerFront.png");
+    Player player(500,0, 72, 100, &window);
 
     sf::RectangleShape rectangle({400,400});
     rectangle.setPosition(500, 500);

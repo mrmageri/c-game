@@ -1,32 +1,25 @@
-#include"MoveableRectangle.h"
+#include "Player.h"
 
-enum COLLISION_DIRECTION {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    NONE
-};
 
-MoveableRectangle::MoveableRectangle(sf::RenderWindow *window) : window(window) {}
 
-MoveableRectangle::MoveableRectangle(float x, float y, float w, float h, sf::RenderWindow *window, const std::string& path, sf::Color color)
-        : sf::RectangleShape({w, h}), window(window) {
+Player::Player(float x, float y, float w, float h, sf::RenderWindow* window, sf::Color color) : MoveableRectangle(window) {
     setPosition(x, y);
     setFillColor(color);
-    if (!texture.loadFromFile(path)) {
+    if (!texture.loadFromFile(PLAYER_FRONT)) {
         throw std::runtime_error("No player sprite found!");
     }
-    if (!textureRight.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerRight.png")) {
+    if (!textureRight.loadFromFile(PLAYER_RIGHT)) {
         throw std::runtime_error("No player sprite found!");
     }
-    if (!textureLeft.loadFromFile("E:/mrmageri-ñ++/c-game/resources/player/playerLeft.png")) {
+    if (!textureLeft.loadFromFile(PLAYER_LEFT)) {
         throw std::runtime_error("No player sprite found!");
     }
     setTexture(&texture);
-}
+};
 
-void MoveableRectangle::ProcessEvent(sf::Event &event) {
+
+
+void Player::ProcessEvent(sf::Event &event) {
    /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
         if (speedy > -5.0f) {
             speedy -= 1.0f;
@@ -55,7 +48,7 @@ void MoveableRectangle::ProcessEvent(sf::Event &event) {
     }*/
 }
 
-void MoveableRectangle::ProcessLogic(sf::RectangleShape &rectangleshape) {
+void Player::ProcessLogic(sf::RectangleShape &rectangleshape) {
     ProcessMovement(rectangleshape);
 
 }
@@ -94,7 +87,7 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
 }
 
 
-void MoveableRectangle::ProcessMovement(sf::RectangleShape &rectangleshape) {
+void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     if (getPosition().x + speedx <= 0u || getPosition().x + speedx + getSize().x >= window->getSize().x) {
         speedx = 0;
     }
