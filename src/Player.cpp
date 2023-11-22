@@ -91,20 +91,21 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     if (getPosition().x + speedx <= 0u || getPosition().x + speedx + getSize().x >= window->getSize().x) {
         speedx = 0;
     }
+    float delta = getPosition().y + speedy + getSize().y - rectangleshape.getPosition().y + 1.5f;
+    if (delta > 0.5f && jumped && delta < 25.f) {
+        speedy = std::max(0.5f, speedy - delta);
+    }
     if (getPosition().y + speedy <= 0u || getPosition().y + speedy + getSize().y >= window->getSize().y) {
         speedy = 0;
     }
+
+
     COLLISION_DIRECTION direction = intersectOfRectangles(*this, rectangleshape, {speedx, speedy});
     if (direction != UP) {
         if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
             (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
              getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
-            if (jumped) { 
-                speedy = std::min(speedy + 1.f, 7.f); 
-            }
-            else {
-                speedy += 1.f;
-            }
+            speedy += 1.0f;
         } else {
             if (!jumped) {
                 speedy = 0;
