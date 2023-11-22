@@ -32,6 +32,8 @@ public:
 
 protected:
     virtual void ProcessMovement(sf::RectangleShape &rectangleshape) final;
+private:
+    bool jumped = false;
 };
 
 #endif // !BouncCircle

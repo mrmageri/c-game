@@ -1,8 +1,11 @@
 #include "Player.h"
 
-Player::Player(sf::RenderWindow* window) : MoveableRectangle(window){}
+Player::Player(sf::RenderWindow *window) : MoveableRectangle(window) {}
 
-Player::Player(float x, float y, float w, float h, sf::RenderWindow* window, sf::Color color) : MoveableRectangle( x,  y,  w,  h, window,color) {
+Player::Player(float x, float y, float w, float h, sf::RenderWindow *window, sf::Color color) : MoveableRectangle(x, y,
+                                                                                                                  w, h,
+                                                                                                                  window,
+                                                                                                                  color) {
     if (!texture.loadFromFile(PLAYER_FRONT)) {
         throw std::runtime_error("No player sprite found!");
     }
@@ -16,24 +19,22 @@ Player::Player(float x, float y, float w, float h, sf::RenderWindow* window, sf:
 };
 
 
-
 void Player::ProcessEvent(sf::Event &event) {
-   /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        if (speedy > -5.0f) {
-            speedy -= 1.0f;
-        }
-    } */
-   /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        if (speedy < 5.0f) speedy += 1.0f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            speedy = -10.0f;
+            jumped = true;
+    }
+    /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+         if (speedy < 5.0f) speedy += 1.0f;
 
-    }  */
+     }  */
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         speedx = 5.0f;
         setTexture(&textureRight);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-         speedx = -5.0f;
-         setTexture(&textureLeft);
+        speedx = -5.0f;
+        setTexture(&textureLeft);
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
         !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -48,7 +49,6 @@ void Player::ProcessEvent(sf::Event &event) {
 
 void Player::ProcessLogic(sf::RectangleShape &rectangleshape) {
     ProcessMovement(rectangleshape);
-
 }
 
 COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf::RectangleShape &rhs,
@@ -92,14 +92,17 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     if (getPosition().y + speedy <= 0u || getPosition().y + speedy + getSize().y >= window->getSize().y) {
         speedy = 0;
     }
-    COLLISION_DIRECTION direction = intersectOfRectangles(*this, rectangleshape, { speedx, speedy });
-    if (direction != UP)
-    {
-        if (getPosition().y + getSize().y != rectangleshape.getPosition().y || (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x || getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
+    COLLISION_DIRECTION direction = intersectOfRectangles(*this, rectangleshape, {speedx, speedy});
+    if (direction != UP) {
+        if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
+            (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
+             getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
             speedy += 1;
-        }
-        else {
-            speedy = 0;
+        } else {
+            if (!jumped) {
+                speedy = 0;
+
+            }
         }
     }
     switch (direction) {
@@ -123,5 +126,6 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
             break;
     }
     move({speedx, speedy});
+    jumped = false;
 }
 
