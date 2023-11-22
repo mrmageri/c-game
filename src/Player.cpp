@@ -99,7 +99,12 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
         if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
             (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
              getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
-            speedy += 1;
+            if (jumped) { 
+                speedy = std::min(speedy + 1.f, 7.f); 
+            }
+            else {
+                speedy += 1.f;
+            }
         } else {
             if (!jumped) {
                 speedy = 0;
