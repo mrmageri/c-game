@@ -21,7 +21,6 @@ Player::Player(float x, float y, float w, float h, sf::RenderWindow *window, sf:
 
 void Player::ProcessEvent(sf::Event &event) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-            speedy = -10.0f;
             jumped = true;
     }
     /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
@@ -101,9 +100,11 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
         } else {
             if (!jumped) {
                 speedy = 0;
-
             }
         }
+    }
+    if (jumped && speedy < 0.01f) {
+        speedy = -10.f;
     }
     switch (direction) {
         case UP:
