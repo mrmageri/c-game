@@ -18,10 +18,13 @@ Player::Player(float x, float y, float w, float h, sf::RenderWindow *window, sf:
     setTexture(&texture);
 };
 
+void Player::ProcessEvent(sf::Event &) {}
 
-void Player::ProcessEvent(sf::Event &event) {
+void Player::ProcessKeyboard() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         jumped = true;
+    } else {
+        jumped = false;
     }
     /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
          if (speedy < 5.0f) speedy += 1.0f;

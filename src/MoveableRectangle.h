@@ -21,7 +21,7 @@ public:
 
     virtual ~MoveableRectangle() = default;
 
-    virtual void ProcessEvent(sf::Event &event) = 0;
+    virtual void ProcessEvent(sf::Event&) = 0;
 
     virtual void ProcessLogic(sf::RectangleShape &rectangleshape) = 0;
 

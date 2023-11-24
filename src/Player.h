@@ -26,7 +26,9 @@ public:
 
     virtual ~Player() = default;
 
-    virtual void ProcessEvent(sf::Event &event) final;
+    virtual void ProcessEvent(sf::Event&) final;
+
+    void ProcessKeyboard();
 
     virtual void ProcessLogic(sf::RectangleShape &rectangleshape) final;
 
