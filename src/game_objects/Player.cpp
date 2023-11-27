@@ -51,6 +51,19 @@ void Player::ProcessKeyboard() {
 
 void Player::ProcessLogic(sf::RectangleShape &rectangleshape) {
     ProcessMovement(rectangleshape);
+    //“ут € пыталс€ проверить, что мы колизимс€ именно с &ректЎейп и тогда делать
+    //, но это не помогло. ’от€ вроде тогда должно происходить меньше.
+    sf::FloatRect player_boundingBox = this->getGlobalBounds();
+    if (player_boundingBox.intersects(rectangleshape.getGlobalBounds())) {
+        std::cout << "a";
+        ProcessMovement(rectangleshape);
+    }
+    else {
+       // if (player_boundingBox.intersects()) {
+            speedy = std::min(2.0f, speedy + 0.2f);
+            move(speedx,speedy);
+        //}
+    }
 }
 
 COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf::RectangleShape &rhs,
