@@ -31,11 +31,11 @@ void Player::ProcessKeyboard() {
 
      }  */
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        speedx = 5.0f;
+        speedx = 2.0f;
         setTexture(&textureRight);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        speedx = -5.0f;
+        speedx = -2.0f;
         setTexture(&textureLeft);
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
@@ -59,7 +59,7 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
     if (lhs.getPosition().y + lhs.getSize().y >= rhs.getPosition().y &&
         lhs.getPosition().y < rhs.getPosition().y &&
         lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
-        lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x ) {
+        lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x) {
         std::cout << "TOP collision (" << ++counter << ")\n";
         return UP;
     } else if (lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y &&
@@ -68,14 +68,14 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
                lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x && lhs_speed.y < 0) {
         std::cout << "BOTTOM collision (" << ++counter << ")\n";
         return DOWN;
-    } else if (lhs.getPosition().x + lhs.getSize().x >= rhs.getPosition().x &&
+    } else if (lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
                lhs.getPosition().x < rhs.getPosition().x &&
                lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
                lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x > 0
             ) {
         std::cout << "LEFT collision (" << ++counter << ")\n";
         return LEFT;
-    } else if (lhs.getPosition().x <= rhs.getPosition().x + rhs.getSize().x &&
+    } else if (lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x &&
                lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
                lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
                lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x < 0
@@ -106,18 +106,18 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
         if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
             (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
              getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
-            speedy += 1.0f;
+            speedy = std::min(2.0f, speedy + 0.2f);
+
         }
-    }
-    else {
+    } else {
         if (jumped) {
-            speedy = -10.f;
+            speedy = -6.f;
         }
     }
     switch (direction) {
         case UP:
             setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
-            if(!jumped) speedy = 0;
+            if (!jumped) speedy = 0;
             jumped = false;
             break;
         case DOWN:

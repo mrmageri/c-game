@@ -1,45 +1,95 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include "MoveableRectangle.h"
-#include "Player.h"
-#include "Map.h"
+#include "game_objects/MoveableRectangle.h"
+#include "game_objects/Player.h"
+#include "map/Map.h"
 
 const int MAX_FPS = 60;
 const uint32_t WIDTH = 1920u;
 const uint32_t HEIGHT = 1080u;
 
+/**
+ * MP - main player
+ * B  - block
+ *    - empty
+ */
+//const std::vector<std::vector<std::string> > WORLD_MAP = {
+//        {" ", " ", "MP", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//        {"B", "B", "B",  "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"},
+//};
+
+const std::vector<std::vector<std::string> > WORLD_MAP = {
+        {" ", " ", "MP", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", "B", "B",  "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+        {" ", " ", " ",  " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+};
+
+std::vector<std::vector<CellType>> create_map(const std::vector<std::vector<std::string> > &map) {
+    std::vector<std::vector<CellType>> world(map.size(), std::vector<CellType>(map.at(0).size()));
+    for (size_t i = 0; i < map.size(); ++i) {
+        for (size_t j = 0; j < map[i].size(); ++j) {
+            if (map[i][j] == " ") {
+                world[i][j] = CellType::EMPTY;
+            } else if (map[i][j] == "B") {
+                world[i][j] = CellType::SQUARE;
+            } else if (map[i][j] == "MP") {
+                world[i][j] = CellType::PLAYER;
+            }
+        }
+    }
+    return world;
+}
+
 int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    //Player player(500, 0, 72, 100, &window);
-
-    //sf::RectangleShape rectangle({400, 400});
-   // rectangle.setPosition(500, 500);
+    Player player(0, 0, 64, 64, &window);
 
     Map map;
 
-    map.LoadMap({
-        {CellType::SQUARE, CellType::EMPTY, CellType::SQUARE},
-        {CellType::EMPTY,CellType::SQUARE,CellType::EMPTY},
-        {CellType::SQUARE, CellType::EMPTY, CellType::SQUARE}
-        });
+    map.LoadMap(create_map(WORLD_MAP), player);
 
     while (window.isOpen()) {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-//            if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
-//            }
         }
 
-        //player.ProcessKeyboard();
+        player.ProcessKeyboard();
         window.clear(sf::Color(67, 100, 199));
+
+        for (const auto &cell: map.getMap()) {
+            player.ProcessLogic(*cell);
+//            std::cout << player.getPosition().x << ", " << player.getPosition().y << '\n';
+        }
+
         map.Draw(window);
-        //player.ProcessLogic(rectangle);
-        //window.draw(player);
-        //window.draw(rectangle);
+        window.draw(player);
         window.display();
     }
     return 0;

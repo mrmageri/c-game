@@ -1,7 +1,7 @@
-#ifndef PLAYER
-#define PLAYER
+#ifndef PLAYER_H
+#define PLAYER_H
 
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 #include <iostream>
 #include"MoveableRectangle.h"
 
@@ -38,4 +38,4 @@ private:
     bool jumped = false;
 };
 
-#endif // !Player
+#endif // !Player_H

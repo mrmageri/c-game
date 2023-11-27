@@ -10,7 +10,7 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(CMakeSFMLProject src/main.cpp "src/BouncCircle.h" "src/BouncCircle.cpp" "src/MoveableRectangle.h"  "src/Player.h" "src/Player.cpp" "src/MoveableRectangle.cpp" "src/Square.h" "src/Square.cpp" "src/Map.h" "src/Map.cpp")
+add_executable(CMakeSFMLProject src/main.cpp "src/game_objects/BouncCircle.h" "src/game_objects/BouncCircle.cpp" "src/game_objects/MoveableRectangle.h"  "src/game_objects/Player.h" "src/game_objects/Player.cpp" "src/game_objects/MoveableRectangle.cpp" "src/map/Square.h" "src/map/Square.cpp" "src/map/Map.h" "src/map/Map.cpp")
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
