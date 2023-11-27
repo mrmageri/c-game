@@ -38,4 +38,4 @@ private:
     bool jumped = false;
 };
 
-#endif // !BouncCircle
+#endif // !Player

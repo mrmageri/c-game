@@ -36,4 +36,4 @@ protected:
     sf::Texture textureLeft;
 };
 
-#endif // !BouncCircle
+#endif // !MoveableRectangle

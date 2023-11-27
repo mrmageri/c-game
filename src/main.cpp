@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include "MoveableRectangle.h"
 #include "Player.h"
+#include "Map.h"
 
 const int MAX_FPS = 60;
 const uint32_t WIDTH = 1920u;
@@ -11,10 +12,18 @@ int main() {
     auto window = sf::RenderWindow{{WIDTH, HEIGHT}, "C++ Game"};
     window.setFramerateLimit(MAX_FPS);
 
-    Player player(500, 0, 72, 100, &window);
+    //Player player(500, 0, 72, 100, &window);
 
-    sf::RectangleShape rectangle({400, 400});
-    rectangle.setPosition(500, 500);
+    //sf::RectangleShape rectangle({400, 400});
+   // rectangle.setPosition(500, 500);
+
+    Map map;
+
+    map.LoadMap({
+        {CellType::SQUARE, CellType::EMPTY, CellType::SQUARE},
+        {CellType::EMPTY,CellType::SQUARE,CellType::EMPTY},
+        {CellType::SQUARE, CellType::EMPTY, CellType::SQUARE}
+        });
 
     while (window.isOpen()) {
         for (auto event = sf::Event{}; window.pollEvent(event);) {
@@ -25,11 +34,12 @@ int main() {
 //            }
         }
 
-        player.ProcessKeyboard();
+        //player.ProcessKeyboard();
         window.clear(sf::Color(67, 100, 199));
-        player.ProcessLogic(rectangle);
-        window.draw(player);
-        window.draw(rectangle);
+        map.Draw(window);
+        //player.ProcessLogic(rectangle);
+        //window.draw(player);
+        //window.draw(rectangle);
         window.display();
     }
     return 0;
