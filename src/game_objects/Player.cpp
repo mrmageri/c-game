@@ -51,16 +51,17 @@ void Player::ProcessKeyboard() {
 
 void Player::ProcessLogic(const std::vector<sf::RectangleShape*>& rectangleshape) {
     //ProcessMovement(rectangleshape);
-    //“ут € пыталс€ проверить, что мы колизимс€ именно с &ректЎейп и тогда делать
-    //, но это не помогло. ’от€ вроде тогда должно происходить меньше.
     sf::FloatRect player_boundingBox = this->getGlobalBounds();
     for (int i = 0; i < rectangleshape.size(); ++i) {
-            if (player_boundingBox.intersects(rectangleshape[i]->getGlobalBounds())) {
+        auto collision = intersectOfRectangles(*this, *rectangleshape[i], {speedx, speedy});
+            if (collision!=NONE) {
                 ProcessMovement(*rectangleshape[i]);
                 return;
             }
     }
     speedy = std::min(8.0f, speedy + 0.2f);
+
+    std::cout << speedx << ' ' << speedy << '\n';
     move(speedx, speedy);
 }
 

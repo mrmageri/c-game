@@ -38,4 +38,7 @@ private:
     bool jumped = false;
 };
 
+COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf::RectangleShape &rhs,
+                                          const sf::Vector2<float> &lhs_speed);
+
 #endif // !Player_H
