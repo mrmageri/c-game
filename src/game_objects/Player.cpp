@@ -31,11 +31,11 @@ void Player::ProcessKeyboard() {
 
      }  */
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        speedx = 2.0f;
+        speedx = 5.0f;
         setTexture(&textureRight);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        speedx = -2.0f;
+        speedx = -5.0f;
         setTexture(&textureLeft);
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
@@ -49,21 +49,19 @@ void Player::ProcessKeyboard() {
     }*/
 }
 
-void Player::ProcessLogic(sf::RectangleShape &rectangleshape) {
-    ProcessMovement(rectangleshape);
+void Player::ProcessLogic(const std::vector<sf::RectangleShape*>& rectangleshape) {
+    //ProcessMovement(rectangleshape);
     //“ут € пыталс€ проверить, что мы колизимс€ именно с &ректЎейп и тогда делать
     //, но это не помогло. ’от€ вроде тогда должно происходить меньше.
     sf::FloatRect player_boundingBox = this->getGlobalBounds();
-    if (player_boundingBox.intersects(rectangleshape.getGlobalBounds())) {
-        std::cout << "a";
-        ProcessMovement(rectangleshape);
+    for (int i = 0; i < rectangleshape.size(); ++i) {
+            if (player_boundingBox.intersects(rectangleshape[i]->getGlobalBounds())) {
+                ProcessMovement(*rectangleshape[i]);
+                return;
+            }
     }
-    else {
-       // if (player_boundingBox.intersects()) {
-            speedy = std::min(2.0f, speedy + 0.2f);
-            move(speedx,speedy);
-        //}
-    }
+    speedy = std::min(8.0f, speedy + 0.2f);
+    move(speedx, speedy);
 }
 
 COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf::RectangleShape &rhs,
@@ -119,7 +117,7 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
         if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
             (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
              getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
-            speedy = std::min(2.0f, speedy + 0.2f);
+            speedy = std::min(8.0f, speedy + 0.2f);
 
         }
     } else {

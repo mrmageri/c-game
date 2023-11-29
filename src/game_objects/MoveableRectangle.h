@@ -23,7 +23,7 @@ public:
 
     virtual void ProcessEvent(sf::Event&) = 0;
 
-    virtual void ProcessLogic(sf::RectangleShape &rectangleshape) = 0;
+    virtual void ProcessLogic(const std::vector<sf::RectangleShape*>& rectangleshape) = 0;
 
 protected:
     virtual void ProcessMovement(sf::RectangleShape &rectangleshape) = 0;

@@ -3,7 +3,7 @@
 
 #include "SFML/Graphics.hpp"
 #include <iostream>
-#include"MoveableRectangle.h"
+#include "MoveableRectangle.h"
 
 #if defined(_WIN64)
 const std::string PLAYER_FRONT = "../../../../resources/player/playerFront.png";
@@ -30,7 +30,7 @@ public:
 
     void ProcessKeyboard();
 
-    virtual void ProcessLogic(sf::RectangleShape &rectangleshape) final;
+    virtual void ProcessLogic(const std::vector<sf::RectangleShape*> &rectangleshape) final;
 
 protected:
     virtual void ProcessMovement(sf::RectangleShape &rectangleshape) final;

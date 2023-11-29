@@ -83,10 +83,7 @@ int main() {
         player.ProcessKeyboard();
         window.clear(sf::Color(67, 100, 199));
 
-        for (const auto &cell: map.getMap()) {
-            player.ProcessLogic(*cell);
-//            std::cout << player.getPosition().x << ", " << player.getPosition().y << '\n';
-        }
+        player.ProcessLogic(map.getMap());
 
         map.Draw(window);
         window.draw(player);
