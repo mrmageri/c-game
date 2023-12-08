@@ -21,7 +21,7 @@ Player::Player(float x, float y, float w, float h, sf::RenderWindow *window, sf:
 void Player::ProcessEvent(sf::Event &) {}
 
 void Player::ProcessKeyboard() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && can_jump) {
         jumped = true;
     } else {
         jumped = false;
@@ -97,6 +97,7 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
 }
 
 void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& shapes) {
+    can_jump = false;
     for (const auto& cube : shapes) {
         auto rectangleshape = *cube;
         if (getPosition().x + speedx <= 0u || getPosition().x + speedx + getSize().x >= window->getSize().x) {
@@ -117,7 +118,6 @@ void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& sh
         if (direction == DOWN) {
             setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
             speedy = 0;
-            can_jump = false;
         }
         if (direction == LEFT) {
             setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
@@ -129,6 +129,7 @@ void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& sh
         }
     }
     if (can_jump && jumped) speedy = -6.;
+    speedy = std::min(0.f, speedy + 0.5f);
     move({speedx, speedy});
 }
 
