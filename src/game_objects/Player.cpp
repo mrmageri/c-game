@@ -26,11 +26,9 @@ void Player::ProcessKeyboard() {
     } else {
         jumped = false;
     }
-    /* if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-         if (speedy < 5.0f) speedy += 1.0f;
 
-     }  */
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && canMoveRight) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && canMoveRight) {
         speedx = 5.0f;
         setTexture(&textureRight);
     }
@@ -43,21 +41,20 @@ void Player::ProcessKeyboard() {
         speedx = 0;
         setTexture(&texture);
     }
-    /*if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
-        !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        speedy = 0;
-    }*/
 }
 
-void Player::ProcessLogic(const std::vector<sf::RectangleShape*>& rectangleshape) {
-    //ProcessMovement(rectangleshape);
+void Player::ProcessLogic(const std::vector<sf::RectangleShape *> &rectangleshape) {
     sf::FloatRect player_boundingBox = this->getGlobalBounds();
+    std::vector<sf::RectangleShape *> collision_shapes;
     for (int i = 0; i < rectangleshape.size(); ++i) {
         auto collision = intersectOfRectangles(*this, *rectangleshape[i], {speedx, speedy});
-            if (collision!=NONE) {
-                ProcessMovement(*rectangleshape[i]);
-                return;
-            }
+        if (collision != NONE) {
+            collision_shapes.push_back(rectangleshape[i]);
+        }
+    }
+    if (!collision_shapes.empty()) {
+        ProcessMovementManyCubes(collision_shapes);
+        return;
     }
     speedy = std::min(8.0f, speedy + 0.2f);
 
@@ -70,7 +67,7 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
     static int counter = 0;
     if (lhs.getPosition().y + lhs.getSize().y >= rhs.getPosition().y &&
         lhs.getPosition().y < rhs.getPosition().y &&
-        lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
+        lhs.getPosition().x + lhs.getSize().x >= rhs.getPosition().x &&
         lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x) {
         std::cout << "TOP collision (" << ++counter << ")\n";
         return UP;
@@ -99,15 +96,57 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
     return NONE;
 }
 
+void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& shapes) {
+    for (const auto& cube : shapes) {
+        auto rectangleshape = *cube;
+        if (getPosition().x + speedx <= 0u || getPosition().x + speedx + getSize().x >= window->getSize().x) {
+            speedx = 0;
+        }
+        if (getPosition().y + speedy <= 0u || getPosition().y + speedy + getSize().y >= window->getSize().y) {
+            speedy = 0;
+        }
+
+
+        COLLISION_DIRECTION direction = intersectOfRectangles(*this, rectangleshape, {speedx, speedy});
+        if (direction != UP) {
+            if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
+                (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
+                 getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
+                speedy = std::min(8.0f, speedy + 0.2f);
+
+            }
+        } else {
+            if (jumped) {
+                speedy = -6.f;
+            }
+        }
+
+        if (direction == UP) {
+            setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
+            if (!jumped) speedy = 0;
+            jumped = false;
+        }
+        if (direction == DOWN) {
+            setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
+            speedy = 0;
+        }
+        if (direction == LEFT) {
+            setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
+            speedx = 0;
+        }
+        if (direction == RIGHT) {
+            setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
+            speedx = 0;
+        }
+    }
+    move({speedx, speedy});
+}
+
 
 void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
     if (getPosition().x + speedx <= 0u || getPosition().x + speedx + getSize().x >= window->getSize().x) {
         speedx = 0;
     }
-    /*float delta = getPosition().y + speedy + getSize().y - rectangleshape.getPosition().y + 1.5f;
-    if (delta > 0.5f && jumped && delta < getSize().y/4.f) {
-        speedy = std::max(0.5f, speedy - delta);
-    }*/
     if (getPosition().y + speedy <= 0u || getPosition().y + speedy + getSize().y >= window->getSize().y) {
         speedy = 0;
     }
@@ -126,34 +165,23 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
             speedy = -6.f;
         }
     }
-    switch (direction) {
-        case UP:
-            setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
-            if (!jumped) speedy = 0;
-            jumped = false;
-            canMoveLeft = true;
-            canMoveRight = true;
-            break;
-        case DOWN:
-            setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
-            speedy = 0;
-            canMoveLeft = true;
-            canMoveRight = true;
-            break;
-        case LEFT:
-            canMoveLeft = false;
-            setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
-            speedx = 0;
-            break;
-        case RIGHT:
-            canMoveRight = false;
-            setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
-            speedx = 0;
-            break;
-        case NONE:
-            canMoveLeft = true;
-            canMoveRight = true;
-            break;
+
+    if (direction == UP) {
+        setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
+        if (!jumped) speedy = 0;
+        jumped = false;
+    }
+    if (direction == DOWN) {
+        setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
+        speedy = 0;
+    }
+    if (direction == LEFT) {
+        setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
+        speedx = 0;
+    }
+    if (direction == RIGHT) {
+        setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
+        speedx = 0;
     }
     move({speedx, speedy});
 }

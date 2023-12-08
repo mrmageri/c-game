@@ -26,14 +26,17 @@ public:
 
     virtual ~Player() = default;
 
-    virtual void ProcessEvent(sf::Event&) final;
+    virtual void ProcessEvent(sf::Event &) final;
 
     void ProcessKeyboard();
 
-    virtual void ProcessLogic(const std::vector<sf::RectangleShape*> &rectangleshape) final;
+    virtual void ProcessLogic(const std::vector<sf::RectangleShape *> &rectangleshape) final;
 
 protected:
     virtual void ProcessMovement(sf::RectangleShape &rectangleshape) final;
+
+    virtual void ProcessMovementManyCubes(const std::vector<sf::RectangleShape *> &rectangleshape);
+
 private:
     bool jumped = false;
     bool canMoveRight = true;
