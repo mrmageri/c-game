@@ -108,27 +108,16 @@ void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& sh
 
 
         COLLISION_DIRECTION direction = intersectOfRectangles(*this, rectangleshape, {speedx, speedy});
-        if (direction != UP) {
-            if (getPosition().y + getSize().y != rectangleshape.getPosition().y ||
-                (getPosition().x >= rectangleshape.getPosition().x + rectangleshape.getSize().x ||
-                 getPosition().x + getSize().x <= rectangleshape.getPosition().x)) {
-                speedy = std::min(8.0f, speedy + 0.2f);
-
-            }
-        } else {
-            if (jumped) {
-                speedy = -6.f;
-            }
-        }
 
         if (direction == UP) {
             setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
-            if (!jumped) speedy = 0;
-            jumped = false;
+            speedy = 0;
+            can_jump = true;
         }
         if (direction == DOWN) {
             setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
             speedy = 0;
+            can_jump = false;
         }
         if (direction == LEFT) {
             setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
@@ -139,6 +128,7 @@ void Player::ProcessMovementManyCubes(const std::vector<sf::RectangleShape*>& sh
             speedx = 0;
         }
     }
+    if (can_jump && jumped) speedy = -6.;
     move({speedx, speedy});
 }
 

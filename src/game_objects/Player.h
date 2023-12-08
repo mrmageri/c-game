@@ -38,6 +38,7 @@ protected:
     virtual void ProcessMovementManyCubes(const std::vector<sf::RectangleShape *> &rectangleshape);
 
 private:
+    bool can_jump = false;
     bool jumped = false;
     bool canMoveRight = true;
     bool canMoveLeft = true;
