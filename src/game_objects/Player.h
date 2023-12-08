@@ -36,6 +36,8 @@ protected:
     virtual void ProcessMovement(sf::RectangleShape &rectangleshape) final;
 private:
     bool jumped = false;
+    bool canMoveRight = true;
+    bool canMoveLeft = true;
 };
 
 COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf::RectangleShape &rhs,

@@ -30,11 +30,11 @@ void Player::ProcessKeyboard() {
          if (speedy < 5.0f) speedy += 1.0f;
 
      }  */
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && canMoveRight) {
         speedx = 5.0f;
         setTexture(&textureRight);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && canMoveLeft) {
         speedx = -5.0f;
         setTexture(&textureLeft);
     }
@@ -80,14 +80,14 @@ COLLISION_DIRECTION intersectOfRectangles(const MoveableRectangle &lhs, const sf
                lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x && lhs_speed.y < 0) {
         std::cout << "BOTTOM collision (" << ++counter << ")\n";
         return DOWN;
-    } else if (lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
+    } else if (lhs.getPosition().x + lhs.getSize().x >= rhs.getPosition().x &&
                lhs.getPosition().x < rhs.getPosition().x &&
                lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
                lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x > 0
             ) {
         std::cout << "LEFT collision (" << ++counter << ")\n";
         return LEFT;
-    } else if (lhs.getPosition().x < rhs.getPosition().x + rhs.getSize().x &&
+    } else if (lhs.getPosition().x <= rhs.getPosition().x + rhs.getSize().x &&
                lhs.getPosition().x + lhs.getSize().x > rhs.getPosition().x &&
                lhs.getPosition().y + lhs.getSize().y > rhs.getPosition().y &&
                lhs.getPosition().y < rhs.getPosition().y + rhs.getSize().y && lhs_speed.x < 0
@@ -131,22 +131,31 @@ void Player::ProcessMovement(sf::RectangleShape &rectangleshape) {
             setPosition(getPosition().x, rectangleshape.getPosition().y - getSize().y);
             if (!jumped) speedy = 0;
             jumped = false;
+            canMoveLeft = true;
+            canMoveRight = true;
             break;
         case DOWN:
             setPosition(getPosition().x, rectangleshape.getPosition().y + rectangleshape.getSize().y);
             speedy = 0;
+            canMoveLeft = true;
+            canMoveRight = true;
             break;
         case LEFT:
+            canMoveLeft = false;
             setPosition(rectangleshape.getPosition().x - getSize().x, getPosition().y);
             speedx = 0;
             break;
         case RIGHT:
+            canMoveRight = false;
             setPosition(rectangleshape.getPosition().x + rectangleshape.getSize().x, getPosition().y);
             speedx = 0;
             break;
         case NONE:
+            canMoveLeft = true;
+            canMoveRight = true;
             break;
     }
     move({speedx, speedy});
 }
+
 
